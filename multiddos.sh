@@ -3,7 +3,7 @@
 # curl -Lk https://raw.githubusercontent.com/ignitedevua/multiddos/main/multiddos.sh | bash -s -- --lite -g
 clear && echo -e "Loading... v0.9a\n"
 apt-get update -q -y #>/dev/null 2>&1
-apt-get install -q -y tmux toilet python3 python3-pip 
+apt-get install -q -y tmux python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
 rm -rf ~/multidd; mkdir ~/multidd; cd ~/multidd #delete old folder; create new and cd inside
 rm -rf ~/tmp/ 2>&1
