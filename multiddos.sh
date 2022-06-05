@@ -1,6 +1,6 @@
 #!/bin/bash
 # Modified for work with Android termux https://github.com/termux/termux-app/releases
-# curl -Lk https://raw.githubusercontent.com/ignitedevua/multiddos/main/multiddos.sh | bash -s -- --lite -g
+# curl -Lk https://raw.githubusercontent.com/ignitedevua/multiddos/main/multiddos.sh -o multiddos && bash multiddos --lite -g
 clear && echo -e "Loading... v0.9a\n"
 apt-get update -q -y #>/dev/null 2>&1
 apt-get install -q -y tmux python3 python3-pip 
