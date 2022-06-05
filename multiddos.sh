@@ -6,8 +6,7 @@ apt-get update -q -y #>/dev/null 2>&1
 apt-get install -q -y tmux python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
 rm -rf ~/multidd; mkdir ~/multidd; cd ~/multidd #delete old folder; create new and cd inside
-rm -rf ~/tmp/ 2>&1
-mkdir ~/tmp/
+rm -rf ~/tmp/ 2>&1; mkdir ~/tmp/
 
 typing_on_screen (){
     tput setaf 2 &>/dev/null # green
@@ -36,7 +35,7 @@ prepare_targets_and_banner () {
 export targets_curl=~/tmp/curl.uaripper
 export targets_uniq=~/tmp/uniq.uaripper
 export targets_lite=~/tmp/lite.uaripper
-rm -f /var/tmp/*uaripper #remove previous copies
+rm -f ~/tmp/*
 
 # read targets from github, exclude comments and empty lines, put valid addresses on new line
 echo "$(curl -s https://raw.githubusercontent.com/Aruiem234/auto_mhddos/main/runner_targets)" | while read LINE; do
