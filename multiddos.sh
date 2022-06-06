@@ -53,7 +53,7 @@ cat $targets_curl | sort | uniq | sort -R > $targets_uniq
 
 # Print greetings and number of targets; yes, utility name "toilet" is unfortunate
 clear
-echo " :::: MULTIDDOS ::::\n"
+echo -e " :::: MULTIDDOS ::::\n"
 typing_on_screen 'Шукаю завдання...' ; sleep 0.5
 echo -e "\n\nTotal targets found:" "\x1b[32m $(cat $targets_curl | wc -l)\x1b[m" && sleep 0.1
 echo -e "Uniq targets:" "\x1b[32m $(cat $targets_uniq | wc -l)\x1b[m" && sleep 0.1
@@ -120,9 +120,10 @@ prepare_targets_and_banner
 # create small separate script to re-launch only this small part of code
 cat > auto_bash.sh << 'EOF'
 # create swap file if system doesn't have it
-if [[ $(echo $(swapon --noheadings --bytes | cut -d " " -f3)) == "" ]]; then
-    fallocate -l 1G /swp && chmod 600 /swp && mkswap /swp && swapon /swp
-fi
+# no pkg in termux
+# if [[ $(echo $(swapon --noheadings --bytes | cut -d " " -f3)) == "" ]]; then
+#    fallocate -l 1G /swp && chmod 600 /swp && mkswap /swp && swapon /swp
+# fi
 
 #install mhddos and mhddos_proxy
 cd ~/multidd/
